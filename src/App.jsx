@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <div className="flex flex-row justify-between items-center w-full h-screen text-white bg-zinc-800">
+    <div className="flex flex-row justify-between items-center w-full h-screen text-white bg-zinc-900">
       <SlideBar />
       <FileContent />
       <Toaster position="top-right" reverseOrder={false} />
