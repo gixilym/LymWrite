@@ -1,40 +1,40 @@
 import { useState } from "react";
-import { writeTextFile } from "@tauri-apps/api/fs";
-import { myPathName } from "../store/const.js";
 import { useSnippetStore } from "../store/snippetsStore.js";
-import toast from "react-hot-toast";
-import { join } from "@tauri-apps/api/path";
+import { toastAlert } from "../store/utils.js";
 
 function Form() {
   const [snippetName, setSnippetName] = useState(""),
-    { addSnippetName } = useSnippetStore();
+    { addSnippetName, setSelectedSnippet } = useSnippetStore(),
+    snippetIsCode = snippetName.includes("-code"),
+    snippetCode = snippetName.replace(/-/g, ""),
+    newSnippet = {
+      name: snippetName,
+      content: snippetIsCode
+        ? `let ${snippetCode} = "${snippetName}";`
+        : `## ${snippetName}`,
+      isCode: snippetName.includes("-code"),
+    };
 
   async function onSubmit(event) {
     event.preventDefault();
-    const filePath = await join(myPathName, `${snippetName}.txt`);
-    await writeTextFile(filePath, "");
+    setSelectedSnippet(newSnippet);
     setSnippetName("");
     addSnippetName(snippetName);
-    toast.success("Nota Guardada", {
-      duration: 2000,
-      style: {
-        backgroundColor: "#343434",
-        color: "#fff",
-      },
-    });
+    toastAlert("Nota Guardada", "success");
   }
 
   return (
-    <form onSubmit={e => onSubmit(e)}>
+    <form onSubmit={onSubmit}>
       <input
         onChange={e => setSnippetName(e.target.value)}
         value={snippetName}
+        className="bg-zinc-900 w-full border-b-2 border-zinc-800 outline-none p-4"
         type="text"
-        placeholder="Write a snippet code"
-        className="bg-zinc-950 w-full border-none outline-none p-4"
+        placeholder="Añade un nuevo item"
       />
-
-      <button className="hidden">Save</button>
+      <button className="hidden" type="submit">
+        Save
+      </button>
     </form>
   );
 }

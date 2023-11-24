@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { readDir } from "@tauri-apps/api/fs";
 import { useSnippetStore } from "../store/snippetsStore.js";
-import { myPathName } from "../store/const.js";
+import { desktopDir, join } from "@tauri-apps/api/path";
 import ItemForm from "./ItemForm.jsx";
 
 function ListForm() {
@@ -9,7 +9,14 @@ function ListForm() {
 
   useEffect(() => {
     async function loadFiles() {
-      const res = await readDir(myPathName),
+      const desktopPath = await desktopDir(),
+        myPathName = await join(
+          desktopPath,
+          "every",
+          "morralla",
+          "snippets-code"
+        ),
+        res = await readDir(myPathName),
         filesNames = res.map(file => file.name.split(".")[0]);
       setSnippetsNames(filesNames);
     }
@@ -17,12 +24,12 @@ function ListForm() {
   }, []);
 
   return (
-    <div>
+    <ol className="select-none flex flex-col justify-start items-center">
       {snippetsNames.length > 0 &&
         snippetsNames.map(snippetName => (
-          <ItemForm snippetName={snippetName} />
+          <ItemForm snippetName={snippetName} key={snippetName} />
         ))}
-    </div>
+    </ol>
   );
 }
 

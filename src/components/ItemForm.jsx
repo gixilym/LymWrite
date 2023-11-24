@@ -1,62 +1,70 @@
 import { readTextFile, removeFile } from "@tauri-apps/api/fs";
+import { join, desktopDir } from "@tauri-apps/api/path";
 import { useSnippetStore } from "../store/snippetsStore.js";
-import { myPathName } from "../store/const.js";
 import { twMerge } from "tailwind-merge";
-import { join } from "@tauri-apps/api/path";
-import toast from "react-hot-toast";
+import { SettingsSVG } from "./svgs.jsx";
+import { toastAlert } from "../store/utils.js";
 
 function ItemForm(props) {
   const { snippetName } = props,
     { setSelectedSnippet, selectedSnippet, removeSnippet } = useSnippetStore();
 
   async function onClickItem() {
-    const filePath = await join(myPathName, `${snippetName}.txt`),
-      snippetContent = await readTextFile(filePath);
-    setSelectedSnippet({
-      name: snippetName,
-      content: snippetContent,
-      isCode: snippetName.includes("-code"),
-    });
+    const desktopPath = await desktopDir(),
+      myPathName = await join(
+        desktopPath,
+        "every",
+        "morralla",
+        "snippets-code"
+      ),
+      filePath = await join(myPathName, `${snippetName}.txt`),
+      snippetContent = await readTextFile(filePath),
+      newSnippet = {
+        name: snippetName,
+        content: snippetContent,
+        isCode: snippetName.includes("-code"),
+      };
+    setSelectedSnippet(newSnippet);
   }
 
-  async function handleDelete() {
-    const accept = await window.confirm(`Deseas eliminar ${snippetName}?`);
+  async function handleDelete(event) {
+    event.stopPropagation();
+    const desktopPath = await desktopDir(),
+      myPathName = await join(
+        desktopPath,
+        "every",
+        "morralla",
+        "snippets-code"
+      ),
+      accept = await window.confirm(`Deseas eliminar ${snippetName}?`),
+      deletedSnippet = {
+        name: null,
+        content: "",
+        isCode: false,
+      };
+
     if (accept) {
       const filePath = await join(myPathName, `${snippetName}.txt`);
       await removeFile(filePath);
       removeSnippet(snippetName);
-      toast.error("Nota eliminada", {
-        duration: 2000,
-        style: {
-          backgroundColor: "#202020",
-          color: "#fff",
-        },
-      });
+      setSelectedSnippet(deletedSnippet);
+      toastAlert("Nota eliminada", "error");
     } else return;
   }
 
   return (
-    <div
+    <li
       key={snippetName}
       onClick={onClickItem}
       className={twMerge(
-        "py-2 px-4 hover:cursor-pointer flex justify-between",
-        selectedSnippet?.name === snippetName ? "bg-yellow-500" : "bg-zinc-900"
+        "w-full py-2 px-4 hover:cursor-pointer hover:bg-zinc-800 flex justify-between",
+        selectedSnippet.name === snippetName ? "bg-zinc-800" : "bg-zinc-900"
       )}
     >
       <p>{snippetName}</p>
 
-      <div className="flex gap-2">
-        <button
-          onClick={event => {
-            event.stopPropagation();
-            handleDelete();
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
+      <SettingsSVG onClick={e => handleDelete(e)} />
+    </li>
   );
 }
 
