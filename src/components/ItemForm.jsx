@@ -7,7 +7,12 @@ import { toastAlert } from "../store/utils.js";
 
 function ItemForm(props) {
   const { snippetName } = props,
-    { setSelectedSnippet, selectedSnippet, removeSnippet } = useSnippetStore();
+    {
+      setSelectedSnippet,
+      selectedSnippet,
+      removeSnippet,
+      setSlideBarIsVisible,
+    } = useSnippetStore();
 
   async function onClickItem() {
     const desktopPath = await desktopDir(),
@@ -25,6 +30,7 @@ function ItemForm(props) {
         isCode: snippetName.includes("-code"),
       };
     setSelectedSnippet(newSnippet);
+    setSlideBarIsVisible();
   }
 
   async function handleDelete(event) {
@@ -57,7 +63,7 @@ function ItemForm(props) {
       key={snippetName}
       onClick={onClickItem}
       className={twMerge(
-        "w-full py-2 px-4 hover:cursor-pointer hover:bg-zinc-800 flex justify-between",
+        "w-full py-2 px-4 hover:cursor-pointer hover:bg-zinc-800 flex justify-between border-b-2 border-zinc-700",
         selectedSnippet.name === snippetName ? "bg-zinc-800" : "bg-zinc-900"
       )}
     >
