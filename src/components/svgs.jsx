@@ -103,7 +103,7 @@ function ArrowConfig({ onClick }) {
   return (
     <svg
       onClick={onClick}
-      className="rotate-180 border-2 border-slate-400 rounded-lg cursor-pointer w-1/4"
+      className="rotate-180 border-2 border-slate-400 rounded-lg cursor-pointer w-1/5"
       width="50px"
       height="50px"
       viewBox="0 0 24 24"

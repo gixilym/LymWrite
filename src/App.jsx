@@ -13,9 +13,7 @@ function App() {
     { userConfig, setUserConfig } = useSnippetStore(),
     dictionary = translations();
 
-  //!subi los cambios cunado termines configuracion
-
-  if (!configPage) {
+  if (configPage) {
     return (
       <div
         className={twMerge(
@@ -24,9 +22,9 @@ function App() {
           "flex flex-col justify-start pt-16 pb-6 gap-y-20 items-center w-full min-h-screen"
         )}
       >
-        <div className="flex justify-between items-center w-2/4">
+        <div className="flex justify-between items-center w-2/6 gap-x-4">
           <ArrowConfig onClick={() => setConfigPage(false)} />
-          <p className="text-4xl w-2/4">{dictionary.Configuration}</p>
+          <p className="text-4xl w-4/5">{dictionary.Configuration}</p>
         </div>
 
         <form
@@ -36,10 +34,10 @@ function App() {
             htmlFor="language"
             className="flex items-center justify-between w-3/6"
           >
-            <p className="w-2/4">{dictionary.Language}</p>
+            <p className="w-3/5">{dictionary.Language}</p>
             <select
               id="language"
-              className="rounded w-2/4 outline-none text-black text-center bg-slate-400"
+              className="rounded w-2/5 outline-none text-black text-center bg-slate-400 text-lg font-bold"
               onChange={e => setUserConfig({ language: e.target.value })}
               defaultValue="en"
             >
@@ -52,10 +50,10 @@ function App() {
             htmlFor="theme"
             className="flex items-center justify-between w-3/6"
           >
-            <p className="w-2/4">{dictionary.Theme}</p>
+            <p className="w-3/5">{dictionary.Theme}</p>
             <select
               id="theme"
-              className="rounded w-2/4 outline-none text-black text-center bg-slate-400 "
+              className="rounded w-2/5 outline-none text-black text-center bg-slate-400 text-lg font-bold"
               defaultValue="bg-zinc-800 text-white"
               onChange={e => setUserConfig({ theme: e.target.value })}
             >
@@ -65,7 +63,7 @@ function App() {
               <option value="bg-black text-white">
                 {dictionary.DarkNight}
               </option>
-              <option value="bg-[#dadada] text-slate-900 ">
+              <option value="bg-[#dadada] text-slate-900">
                 {dictionary.Day}
               </option>
             </select>
@@ -75,10 +73,10 @@ function App() {
             htmlFor="fontSize"
             className="flex items-center justify-between w-3/6"
           >
-            <p className="w-2/4">{dictionary.FontSize}</p>
+            <p className="w-3/5">{dictionary.FontSize}</p>
             <select
               id="fontSize"
-              className="rounded w-2/4 outline-none text-black text-center bg-slate-400 "
+              className="rounded w-2/5 outline-none text-black text-center bg-slate-400 text-lg font-bold"
               defaultValue="text-2xl"
               onChange={e => setUserConfig({ fontSize: e.target.value })}
             >
@@ -93,11 +91,11 @@ function App() {
             htmlFor="fontFamily"
             className="flex items-center justify-between w-3/6"
           >
-            <p className="w-2/4">{dictionary.FontFamily}</p>
+            <p className="w-3/5">{dictionary.FontFamily}</p>
 
             <select
               id="fontFamily"
-              className="rounded w-2/4 outline-none text-black text-center bg-slate-400"
+              className="rounded w-2/5 outline-none text-black text-center bg-slate-400 text-lg font-bold"
               defaultValue="font-Roboto"
               onChange={e => setUserConfig({ fontFamily: e.target.value })}
             >
@@ -106,6 +104,27 @@ function App() {
               <option value="font-OpenSans">Open Sans</option>
               <option value="font-Lato">Lato</option>
             </select>
+          </label>
+
+          <label
+            htmlFor="textCenter"
+            className="flex items-center justify-between w-3/6"
+          >
+            <p className="w-3/5">{dictionary.TextCenter}</p>
+            <span
+              id="textCenter"
+              onClick={() =>
+                setUserConfig({ textCenter: !userConfig.textCenter })
+              }
+              className={twMerge(
+                userConfig.textCenter
+                  ? "bg-green-500 text-black"
+                  : "bg-red-700 text-white",
+                `rounded w-2/5 h-7 outline-none text-center text-lg cursor-pointer font-bold`
+              )}
+            >
+              {userConfig.textCenter ? dictionary.Enabled : dictionary.Disabled}
+            </span>
           </label>
         </form>
 
@@ -119,7 +138,9 @@ function App() {
   }
 
   return (
-    <div className="flex flex-row justify-center items-center w-full h-screen text-white bg-zinc-900">
+    <div
+      className={`${userConfig.fontFamily} ${userConfig.fontSize} flex flex-row justify-center items-center w-full h-screen text-white bg-zinc-900`}
+    >
       <SectionToOpenSnippets />
       <SnippetsList setConfigPage={setConfigPage} />
       <FileContent />

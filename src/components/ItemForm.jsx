@@ -3,7 +3,7 @@ import { join, desktopDir } from "@tauri-apps/api/path";
 import { useSnippetStore } from "../store/snippetsStore.js";
 import { twMerge } from "tailwind-merge";
 import { SettingsSVG } from "./svgs.jsx";
-import { toastAlert } from "../store/utils.js";
+import { toastAlert, translations } from "../store/utils.js";
 
 function ItemForm(props) {
   const { snippetName } = props,
@@ -12,7 +12,8 @@ function ItemForm(props) {
       selectedSnippet,
       removeSnippet,
       setSlideBarIsVisible,
-    } = useSnippetStore();
+    } = useSnippetStore(),
+    dictionary = translations();
 
   async function onClickItem() {
     const desktopPath = await desktopDir(),
@@ -42,7 +43,7 @@ function ItemForm(props) {
         "morralla",
         "snippets-code"
       ),
-      accept = await window.confirm(`Deseas eliminar ${snippetName}?`),
+      accept = await window.confirm(`${dictionary.WantDelete} ${snippetName}?`),
       deletedSnippet = {
         name: null,
         content: "",
@@ -54,7 +55,7 @@ function ItemForm(props) {
       await removeFile(filePath);
       removeSnippet(snippetName);
       setSelectedSnippet(deletedSnippet);
-      toastAlert("Nota eliminada", "error");
+      toastAlert(dictionary.DeletedNote, "error");
     } else return;
   }
 
@@ -63,7 +64,7 @@ function ItemForm(props) {
       key={snippetName}
       onClick={onClickItem}
       className={twMerge(
-        "w-full py-2 px-4 hover:cursor-pointer hover:bg-zinc-800 flex justify-between border-b-2 border-zinc-700",
+        "w-full py-2 px-4 hover:cursor-pointer hover:bg-zinc-800 flex justify-between items-center border-b-2 border-zinc-700",
         selectedSnippet.name === snippetName ? "bg-zinc-800" : "bg-zinc-900"
       )}
     >

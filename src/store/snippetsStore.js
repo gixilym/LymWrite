@@ -33,6 +33,7 @@ export const useSnippetStore = create(set => ({
     theme: "bg-zinc-800 text-white",
     fontSize: "text-2xl",
     fontFamily: "font-Roboto",
+    textCenter: false,
   },
   setUserConfig: newConfig =>
     set(state => ({ userConfig: { ...state.userConfig, ...newConfig } })),

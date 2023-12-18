@@ -40,6 +40,15 @@ function translations() {
     Large: userLanguage("Large", "Grande"),
     FontFamily: userLanguage("Font Family", "Fuente de letra"),
     CreatedBySL: userLanguage("Created by Staff Lym", "Creado por Staff Lym"),
+    AddNewItem: userLanguage("Add a new item", "Añade un nuevo item"),
+    EnterName: userLanguage("Enter name", "Debes ingresar un nombre"),
+    RepeatedItem: userLanguage("Repeated item", "Item repetido"),
+    SavedNote: userLanguage("Saved note", "Nota guardada"),
+    DeletedNote: userLanguage("Deleted note", "Nota eliminada"),
+    WantDelete: userLanguage("You want to delete", "Quieres eliminar"),
+    Disabled: userLanguage("Disabled", "Deshabilitado"),
+    Enabled: userLanguage("Enabled", "Habilitado"),
+    TextCenter: userLanguage("Text Center", "Texto centrado"),
   };
 
   return dictionary;

@@ -2,17 +2,21 @@ import Form from "./Form.jsx";
 import ListForm from "./ListForm.jsx";
 import { useSnippetStore } from "../store/snippetsStore.js";
 import { motion, AnimatePresence } from "framer-motion";
+import { translations } from "../store/utils.js";
 
-function SnippetsList({ setConfigPage }) {
-  const { slideBarIsVisible } = useSnippetStore();
+function SnippetsList(props) {
+  const { setConfigPage } = props,
+    { slideBarIsVisible, userConfig } = useSnippetStore(),
+    dictionary = translations();
+
   return (
     slideBarIsVisible && (
       <>
         <p
           onClick={() => setConfigPage(true)}
-          className="cursor-pointer tracking-wider text-lg text-center text-zinc-400 hover:text-white w-38 absolute top-5 right-5 flex justify-center items-center"
+          className={`${userConfig.fontFamily} text-1xl cursor-pointer tracking-wider text-lg text-center text-zinc-400 hover:text-white w-38 absolute top-5 right-5 flex justify-center items-center`}
         >
-          Configuración
+          {dictionary.Configuration}
         </p>
         <AnimatePresence>
           <motion.aside

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSnippetStore } from "../store/snippetsStore.js";
-import { toastAlert } from "../store/utils.js";
+import { toastAlert, translations } from "../store/utils.js";
 
 function Form() {
   const [snippetName, setSnippetName] = useState(""),
@@ -10,6 +10,7 @@ function Form() {
       setSlideBarIsVisible,
       snippetsNames,
     } = useSnippetStore(),
+    dictionary = translations(),
     snippetIsCode = snippetName.includes("-code"),
     snippetCode = snippetName.replace(/-/g, ""),
     newSnippet = {
@@ -24,12 +25,12 @@ function Form() {
     event.preventDefault();
 
     if (!snippetName) {
-      toastAlert("Debes ingresar un nombre", "error");
+      toastAlert(dictionary.EnterName, "error");
       return;
     }
 
     if (snippetsNames.some(name => name === snippetName)) {
-      toastAlert("Nombre de item repeteido", "error");
+      toastAlert(dictionary.RepeatedItem, "error");
       return;
     }
 
@@ -37,7 +38,7 @@ function Form() {
     addSnippetName(snippetName);
     setSelectedSnippet(newSnippet);
     setSlideBarIsVisible();
-    toastAlert("Nota Guardada", "success");
+    toastAlert(dictionary.SavedNote, "success");
   }
 
   return (
@@ -47,7 +48,7 @@ function Form() {
         value={snippetName}
         className="bg-zinc-900 w-full border-b-2 border-zinc-800 outline-none p-4"
         type="text"
-        placeholder="Añade un nuevo item"
+        placeholder={dictionary.AddNewItem}
       />
       <button className="hidden" type="submit">
         Save
