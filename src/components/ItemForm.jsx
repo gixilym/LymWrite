@@ -18,7 +18,7 @@ function ItemForm(props) {
     const desktopPath = await desktopDir(),
       myPathName = await join(
         desktopPath,
-        "every",
+        "toding",
         "morralla",
         "snippets-code"
       ),
@@ -38,7 +38,7 @@ function ItemForm(props) {
     const desktopPath = await desktopDir(),
       myPathName = await join(
         desktopPath,
-        "every",
+        "toding",
         "morralla",
         "snippets-code"
       ),

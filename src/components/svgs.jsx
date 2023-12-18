@@ -99,4 +99,27 @@ function Feather() {
   );
 }
 
-export { SettingsSVG, ArrowLeft, ArrowRight, Feather };
+function ArrowConfig({ onClick }) {
+  return (
+    <svg
+      onClick={onClick}
+      className="rotate-180 border-2 border-slate-400 rounded-lg cursor-pointer w-1/4"
+      width="50px"
+      height="50px"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <g>
+        <path
+          d="M6 12H18M18 12L13 7M18 12L13 17"
+          stroke="rgb(161 161 170)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+    </svg>
+  );
+}
+
+export { SettingsSVG, ArrowLeft, ArrowRight, Feather, ArrowConfig };

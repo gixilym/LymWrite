@@ -27,4 +27,13 @@ export const useSnippetStore = create(set => ({
   slideBarIsVisible: false,
   setSlideBarIsVisible: () =>
     set(state => ({ slideBarIsVisible: !state.slideBarIsVisible })),
+
+  userConfig: {
+    language: "en",
+    theme: "bg-zinc-800 text-white",
+    fontSize: "text-2xl",
+    fontFamily: "font-Roboto",
+  },
+  setUserConfig: newConfig =>
+    set(state => ({ userConfig: { ...state.userConfig, ...newConfig } })),
 }));

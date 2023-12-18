@@ -1,6 +1,6 @@
 import { useSnippetStore } from "../store/snippetsStore.js";
 
-function ArrowSlideBar() {
+function SectionToOpenSnippets() {
   const { slideBarIsVisible, setSlideBarIsVisible } = useSnippetStore();
 
   return (
@@ -13,4 +13,4 @@ function ArrowSlideBar() {
   );
 }
 
-export default ArrowSlideBar;
+export default SectionToOpenSnippets;

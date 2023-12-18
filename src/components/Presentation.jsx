@@ -10,7 +10,7 @@ function Presentation() {
         </h1>
         <Feather />
         <div className="flex flex-col justify-end items-end">
-          <p className="text-lg text-gray-400">Versión: 1.0.0</p>
+          <p className="text-lg text-gray-400">Versión: 1.0.1</p>
           <p className="text-lg text-gray-400">Desarrollado por Staff Lym</p>
         </div>
       </div>

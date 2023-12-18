@@ -4,7 +4,12 @@ import { toastAlert } from "../store/utils.js";
 
 function Form() {
   const [snippetName, setSnippetName] = useState(""),
-    { addSnippetName, setSelectedSnippet } = useSnippetStore(),
+    {
+      addSnippetName,
+      setSelectedSnippet,
+      setSlideBarIsVisible,
+      snippetsNames,
+    } = useSnippetStore(),
     snippetIsCode = snippetName.includes("-code"),
     snippetCode = snippetName.replace(/-/g, ""),
     newSnippet = {
@@ -17,9 +22,21 @@ function Form() {
 
   async function onSubmit(event) {
     event.preventDefault();
-    setSelectedSnippet(newSnippet);
+
+    if (!snippetName) {
+      toastAlert("Debes ingresar un nombre", "error");
+      return;
+    }
+
+    if (snippetsNames.some(name => name === snippetName)) {
+      toastAlert("Nombre de item repeteido", "error");
+      return;
+    }
+
     setSnippetName("");
     addSnippetName(snippetName);
+    setSelectedSnippet(newSnippet);
+    setSlideBarIsVisible();
     toastAlert("Nota Guardada", "success");
   }
 

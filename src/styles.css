@@ -3,14 +3,11 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  background-color: transparent;
+  background-color: rgb(40, 40, 40);
+  width: 15px;
 }
-::-moz-scrollbar {
-  background-color: transparent;
-}
-::-ms-scrollbar {
-  background-color: transparent;
-}
-::-o-scrollbar {
-  background-color: transparent;
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(64, 64, 64);
+  border-radius: 5px;
 }
