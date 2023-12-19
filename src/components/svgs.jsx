@@ -3,10 +3,10 @@ import { useSnippetStore } from "../store/snippetsStore";
 function SettingsSVG({ onClick }) {
   return (
     <svg
-      className="flex gap-2"
+      className="hover:scale-110 duration-100 cursor-pointer "
       onClick={onClick}
-      width="20px"
-      height="20px"
+      width="25px"
+      height="25px"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

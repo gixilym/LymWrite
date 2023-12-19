@@ -1,8 +1,13 @@
+import { useSnippetStore } from "../store/snippetsStore.js";
 import { Feather } from "./svgs.jsx";
 
 function Presentation() {
+  const { userConfig } = useSnippetStore();
+
   return (
-    <section className="w-full h-screen flex flex-col justify-center items-center pb-6 bg-zinc-900 text-center font-sans text-7xl">
+    <section
+      className={`${userConfig.theme} w-full h-screen flex flex-col justify-center items-center pb-6 text-center text-7xl`}
+    >
       <div className="flex justify-center items-center gap-10">
         <h1>
           <span className="text-indigo-500">L</span>ym

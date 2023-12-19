@@ -20,12 +20,10 @@ function Editor() {
         const desktopPath = await desktopDir(),
           myPathName = await join(
             desktopPath,
-            "toding",
-            "morralla",
-            "snippets-code"
-          ),
-          filePath = await join(myPathName, `${selectedSnippet.name}.txt`);
-        await writeTextFile(filePath, contentSnippet);
+            "lymwrite-files",
+            `${selectedSnippet.name}.txt`
+          );
+        await writeTextFile(myPathName, contentSnippet);
       }, 1500);
       return () => clearTimeout(saveContentSnippet);
     }

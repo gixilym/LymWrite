@@ -1,12 +1,6 @@
 import { create } from "zustand";
-// import { join, desktopDir } from "@tauri-apps/api/path";
-
-//? Agregar esta funcionalidad.
-// const desktopPath = await desktopDir();
 
 export const useSnippetStore = create(set => ({
-  // routePathUser: desktopPath,
-  // setRoutePathUser: newRoute => set({ routePathUser: newRoute }),
   snippetsNames: [],
   addSnippetName: name =>
     set(state => ({

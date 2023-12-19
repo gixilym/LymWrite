@@ -49,6 +49,9 @@ function translations() {
     Disabled: userLanguage("Disabled", "Deshabilitado"),
     Enabled: userLanguage("Enabled", "Habilitado"),
     TextCenter: userLanguage("Text Center", "Texto centrado"),
+    ChangeOrder: userLanguage("Change order", "Alterar orden"),
+    NothingHere: userLanguage("Nothing here...", "Nada por aquí..."),
+    SearchItem: userLanguage("Search a item", "Busca un item"),
   };
 
   return dictionary;
