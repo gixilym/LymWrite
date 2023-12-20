@@ -6,13 +6,20 @@ import { motion, AnimatePresence } from "framer-motion";
 
 function SnippetsList({ setConfigPage }) {
   const { slideBarIsVisible } = useSnippetStore(),
-    [searchItem, setSearchItem] = useState(null);
+    [searchItem, setSearchItem] = useState(null),
+    [paperIsOpen, setPaperIsOpen] = useState(false);
 
   useEffect(() => {
     if (searchItem === "") {
       setSearchItem(null);
     }
   }, [searchItem]);
+
+  useEffect(() => {
+    if (searchItem !== "") {
+      setSearchItem(null);
+    }
+  }, [slideBarIsVisible]);
 
   return (
     slideBarIsVisible && (
@@ -23,8 +30,17 @@ function SnippetsList({ setConfigPage }) {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          <Form setSearchItem={setSearchItem} setConfigPage={setConfigPage} />
-          <ListForm searchItem={searchItem} />
+          <Form
+            setSearchItem={setSearchItem}
+            setConfigPage={setConfigPage}
+            paperIsOpen={paperIsOpen}
+            setPaperIsOpen={setPaperIsOpen}
+          />
+          <ListForm
+            searchItem={searchItem}
+            setSearchItem={setSearchItem}
+            paperIsOpen={paperIsOpen}
+          />
         </motion.aside>
       </AnimatePresence>
     )

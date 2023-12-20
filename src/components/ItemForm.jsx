@@ -1,19 +1,25 @@
 import { readTextFile, removeFile } from "@tauri-apps/api/fs";
+2;
 import { join, desktopDir } from "@tauri-apps/api/path";
 import { confirm } from "@tauri-apps/api/dialog";
 import { useSnippetStore } from "../store/snippetsStore.js";
-import { toastAlert, translations } from "../store/utils.js";
+import { translations } from "../store/utils.js";
 import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
+import { toast } from "react-hot-toast";
+import { DeleteItemSVG, RecoveryItemSVG } from "./svgs.jsx";
 
 function ItemForm(props) {
-  const { snippetName } = props,
+  const { snippetName, inTrash, paperIsOpen } = props,
     {
       setSelectedSnippet,
       selectedSnippet,
       removeSnippet,
       setSlideBarIsVisible,
+      addPaperBinItem,
       userConfig,
+      removePaperBinItem,
+      addSnippetName,
     } = useSnippetStore(),
     dictionary = translations();
 
@@ -32,9 +38,35 @@ function ItemForm(props) {
 
   async function handleDelete(event) {
     event.stopPropagation();
-    const desktop = await desktopDir(),
-      myPathName = await join(desktop, "lymwrite-files"),
-      accept = await confirm(`${dictionary.WantDelete} ${snippetName}?`, {
+    const confirmDelete = await confirm(
+        `${dictionary.WantDelete} ${snippetName}?`,
+        {
+          title: "LymWrite",
+          type: "warning",
+        }
+      ),
+      desktop = await desktopDir(),
+      path = await join(desktop, "lymwrite-files"),
+      filePath = await join(path, `${snippetName}.txt`);
+
+    if (confirmDelete) {
+      removePaperBinItem(snippetName);
+      toast(`Mataste a ${snippetName}`, {
+        icon: "⚰️",
+        duration: 2000,
+        style: {
+          backgroundColor: "#202020",
+          color: "red",
+        },
+      });
+      await removeFile(filePath);
+    } else return;
+  }
+
+  async function handleMoveToTrash(event) {
+    event.stopPropagation();
+
+    const accept = await confirm(`${dictionary.MoveToTrash} ${snippetName}?`, {
         title: "LymWrite",
         type: "warning",
       }),
@@ -45,11 +77,39 @@ function ItemForm(props) {
       };
 
     if (accept) {
-      const filePath = await join(myPathName, `${snippetName}.txt`);
-      await removeFile(filePath);
+      toast(dictionary.SentToTrash, {
+        icon: "🗑️",
+        duration: 1500,
+        style: {
+          backgroundColor: "#202020",
+          color: "#fff",
+        },
+      });
+      addPaperBinItem(snippetName);
       removeSnippet(snippetName);
       setSelectedSnippet(deletedSnippet);
-      toastAlert(dictionary.DeletedNote, "error");
+    } else return;
+  }
+
+  async function recoveryPaperItem(event) {
+    event.stopPropagation();
+
+    const recovery = await confirm(`Deseas recuperar ${snippetName}?`, {
+      title: "LymWrite",
+      type: "warning",
+    });
+
+    if (recovery) {
+      removePaperBinItem(snippetName);
+      addSnippetName(snippetName);
+      toast(`Reviviste a ${snippetName}`, {
+        icon: "❤️",
+        duration: 2000,
+        style: {
+          backgroundColor: "#202020",
+          color: "#fff",
+        },
+      });
     } else return;
   }
 
@@ -73,13 +133,21 @@ function ItemForm(props) {
         {snippetName}
       </motion.p>
 
-      <div
-        onClick={handleDelete}
-        className="flex w-8 gap-x-1 justify-center items-center"
-      >
-        <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
-        <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
-        <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
+      <div className="flex justify-center items-center gap-x-4">
+        {inTrash && <RecoveryItemSVG onClick={recoveryPaperItem} />}
+
+        {paperIsOpen ? (
+          <DeleteItemSVG onClick={handleDelete} />
+        ) : (
+          <div
+            onClick={handleMoveToTrash}
+            className="flex w-12 h-6 gap-x-1 justify-center items-center hover:rotate-180 duration-1000"
+          >
+            <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
+            <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
+            <span className=" w-2 h-2 rounded-full bg-zinc-600 hover:bg-zinc-400" />
+          </div>
+        )}
       </div>
     </motion.li>
   );

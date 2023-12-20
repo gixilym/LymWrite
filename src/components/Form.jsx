@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useSnippetStore } from "../store/snippetsStore.js";
 import { toastAlert, translations } from "../store/utils.js";
+import { removeFile } from "@tauri-apps/api/fs";
+import { join, desktopDir } from "@tauri-apps/api/path";
 import { SettingsSVG } from "./svgs.jsx";
+import { twMerge } from "tailwind-merge";
 
 function Form(props) {
-  const { setSearchItem, setConfigPage } = props,
+  const { setSearchItem, setConfigPage, paperIsOpen, setPaperIsOpen } = props,
     [name, setName] = useState(""),
     {
       addSnippetName,
@@ -12,6 +15,8 @@ function Form(props) {
       setSlideBarIsVisible,
       snippetsNames,
       userConfig,
+      paperBin,
+      cleanPaperBin,
     } = useSnippetStore(),
     dictionary = translations(),
     snippetIsCode = name.includes("-code"),
@@ -42,6 +47,25 @@ function Form(props) {
     toastAlert(dictionary.SavedNote, "success");
   }
 
+  async function handleCleanPaperBin() {
+    const confirmClean = await confirm(
+      "Quieres eliminar todos los archivos de la papelera?"
+    );
+
+    const desktop = await desktopDir(),
+      path = await join(desktop, "lymwrite-files");
+
+    if (confirmClean) {
+      cleanPaperBin();
+      toastAlert("Archivos eliminados", "success");
+      setPaperIsOpen(false);
+      await paperBin.map(async function (item) {
+        const filePath = await join(path, `${item}.txt`);
+        await removeFile(filePath);
+      });
+    } else return;
+  }
+
   return (
     <form onSubmit={onSubmit}>
       <input
@@ -55,8 +79,8 @@ function Form(props) {
         Save
       </button>
 
-      <div className="flex justify-between items-center mb-8 w-full text-slate-400 gap-x-3">
-        <div className="relative  flex justify-center items-center">
+      <div className="flex justify-start items-center mb-8 w-full text-slate-400 gap-x-3">
+        <div className="relative flex justify-center items-center">
           <input
             className="outline-0 border-0 bg-zinc-700 w-60 text-start text-white py-1 px-4 rounded-xl"
             type="text"
@@ -82,6 +106,29 @@ function Form(props) {
             />
           </svg>
         </div>
+
+        <button
+          type="button"
+          onClick={() => setPaperIsOpen(!paperIsOpen)}
+          className={twMerge(
+            paperIsOpen
+              ? "bg-green-600 hover:bg-green-500 text-white"
+              : "bg-zinc-700 hover:bg-zinc-600 hover:text-white ",
+            `outline-0 border-0 cursor-pointer w-32  text-center py-1 px-4 rounded-xl`
+          )}
+        >
+          Papelera
+        </button>
+
+        {paperIsOpen && paperBin.length > 0 && (
+          <button
+            className="bg-red-500 hover:bg-red-400 cursor-pointer text-white outline-0 border-0 w-max px-4 py-1 rounded-xl"
+            onClick={handleCleanPaperBin}
+            type="button"
+          >
+            Vaciar
+          </button>
+        )}
 
         <SettingsSVG onClick={() => setConfigPage(true)} />
       </div>

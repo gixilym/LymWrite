@@ -46,6 +46,11 @@ function translations() {
     SavedNote: userLanguage("Saved note", "Nota guardada"),
     DeletedNote: userLanguage("Deleted note", "Nota eliminada"),
     WantDelete: userLanguage("You want to delete", "Quieres eliminar"),
+    MoveToTrash: userLanguage(
+      "Do you want to move to the trash",
+      "Quieres mover a la papelera"
+    ),
+    SentToTrash: userLanguage("Enviado a la papelera", "Sent to trash"),
     Disabled: userLanguage("Disabled", "Deshabilitado"),
     Enabled: userLanguage("Enabled", "Habilitado"),
     TextCenter: userLanguage("Text Center", "Texto centrado"),

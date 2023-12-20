@@ -8,8 +8,6 @@ import { join, desktopDir } from "@tauri-apps/api/path";
 import { fs } from "@tauri-apps/api";
 import { Toaster } from "react-hot-toast";
 
-//! item abajo de papalera [====================].
-
 function App() {
   const [configPage, setConfigPage] = useState(false),
     { userConfig, setUserConfig } = useSnippetStore();

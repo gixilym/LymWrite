@@ -31,4 +31,13 @@ export const useSnippetStore = create(set => ({
   },
   setUserConfig: newConfig =>
     set(state => ({ userConfig: { ...state.userConfig, ...newConfig } })),
+
+  paperBin: [],
+  cleanPaperBin: () => set({ paperBin: [] }),
+  addPaperBinItem: newPaperItem =>
+    set(state => ({ paperBin: [...state.paperBin, newPaperItem] })),
+  removePaperBinItem: removedPaperItem =>
+    set(state => ({
+      paperBin: state.paperBin.filter(item => item !== removedPaperItem),
+    })),
 }));
