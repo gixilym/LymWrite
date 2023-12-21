@@ -3,6 +3,7 @@ import { useSnippetStore } from "../store/snippetsStore.js";
 import { toastAlert, translations } from "../store/utils.js";
 import { removeFile } from "@tauri-apps/api/fs";
 import { join, desktopDir } from "@tauri-apps/api/path";
+import { confirm } from "@tauri-apps/api/dialog";
 import { SettingsSVG } from "./svgs.jsx";
 import { twMerge } from "tailwind-merge";
 
@@ -48,16 +49,17 @@ function Form(props) {
   }
 
   async function handleCleanPaperBin() {
-    const confirmClean = await confirm(
-      "Quieres eliminar todos los archivos de la papelera?"
-    );
+    const confirmClean = await confirm(dictionary.CleanEvery, {
+      title: "LymWrite",
+      type: "warning",
+    });
 
     const desktop = await desktopDir(),
       path = await join(desktop, "lymwrite-files");
 
     if (confirmClean) {
       cleanPaperBin();
-      toastAlert("Archivos eliminados", "success");
+      toastAlert(dictionary.DeleteFiles, "success");
       setPaperIsOpen(false);
       await paperBin.map(async function (item) {
         const filePath = await join(path, `${item}.txt`);
@@ -80,18 +82,14 @@ function Form(props) {
       </button>
 
       <div className="flex justify-start items-center mb-8 w-full text-slate-400 gap-x-3">
-        <div className="relative flex justify-center items-center">
+        <div className="relative flex justify-between items-center w-3/6 bg-zinc-700 rounded-xl">
           <input
-            className="outline-0 border-0 bg-zinc-700 w-60 text-start text-white py-1 px-4 rounded-xl"
+            className="outline-0 border-0 bg-zinc-700  rounded-xl w-3/4 text-center text-white py-1"
             type="text"
             placeholder={dictionary.SearchItem}
             onChange={e => setSearchItem(e.target.value)}
           />
-          <svg
-            className="absolute top-0.7 right-0 w-10 h-8"
-            viewBox="0 0 24 24"
-            fill="transparent"
-          >
+          <svg className="w-1/4 h-8" viewBox="0 0 24 24" fill="transparent">
             <rect width="24" height="24" fill="transparent" />
             <circle
               cx="10.5"
@@ -114,10 +112,10 @@ function Form(props) {
             paperIsOpen
               ? "bg-green-600 hover:bg-green-500 text-white"
               : "bg-zinc-700 hover:bg-zinc-600 hover:text-white ",
-            `outline-0 border-0 cursor-pointer w-32  text-center py-1 px-4 rounded-xl`
+            `outline-0 border-0 cursor-pointer w-max text-center py-1 px-4 rounded-xl`
           )}
         >
-          Papelera
+          {dictionary.Paper}
         </button>
 
         {paperIsOpen && paperBin.length > 0 && (
@@ -126,7 +124,7 @@ function Form(props) {
             onClick={handleCleanPaperBin}
             type="button"
           >
-            Vaciar
+            {dictionary.Clean}
           </button>
         )}
 

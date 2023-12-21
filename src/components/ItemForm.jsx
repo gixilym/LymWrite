@@ -1,5 +1,4 @@
 import { readTextFile, removeFile } from "@tauri-apps/api/fs";
-2;
 import { join, desktopDir } from "@tauri-apps/api/path";
 import { confirm } from "@tauri-apps/api/dialog";
 import { useSnippetStore } from "../store/snippetsStore.js";
@@ -94,20 +93,23 @@ function ItemForm(props) {
   async function recoveryPaperItem(event) {
     event.stopPropagation();
 
-    const recovery = await confirm(`Deseas recuperar ${snippetName}?`, {
-      title: "LymWrite",
-      type: "warning",
-    });
+    const recovery = await confirm(
+      `${dictionary.RestoreQuestion} ${snippetName}?`,
+      {
+        title: "LymWrite",
+        type: "warning",
+      }
+    );
 
     if (recovery) {
       removePaperBinItem(snippetName);
       addSnippetName(snippetName);
-      toast(`Reviviste a ${snippetName}`, {
+      toast(`${dictionary.RestoreSuccess} ${snippetName}`, {
         icon: "❤️",
         duration: 2000,
         style: {
           backgroundColor: "#202020",
-          color: "#fff",
+          color: "#69ff44",
         },
       });
     } else return;

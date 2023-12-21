@@ -50,13 +50,22 @@ function translations() {
       "Do you want to move to the trash",
       "Quieres mover a la papelera"
     ),
-    SentToTrash: userLanguage("Enviado a la papelera", "Sent to trash"),
+    SentToTrash: userLanguage("Sent to trash", "Movido a la papelera"),
     Disabled: userLanguage("Disabled", "Deshabilitado"),
     Enabled: userLanguage("Enabled", "Habilitado"),
     TextCenter: userLanguage("Text Center", "Texto centrado"),
     ChangeOrder: userLanguage("Change order", "Alterar orden"),
     NothingHere: userLanguage("Nothing here...", "Nada por aquí..."),
     SearchItem: userLanguage("Search a item", "Busca un item"),
+    Paper: userLanguage("Paper", "Papelera"),
+    Clean: userLanguage("Empty", "Vaciar"),
+    CleanEvery: userLanguage(
+      "Do you want to delete all the files from the trash?",
+      "Quieres eliminar todos los archivos de la papelera?"
+    ),
+    DeleteFiles: userLanguage("Deleted files", "Archivos eliminados"),
+    RestoreQuestion: userLanguage("Do you want to restore", "Deseas restaurar"),
+    RestoreSuccess: userLanguage("You revived ", "Reviviste a"),
   };
 
   return dictionary;
