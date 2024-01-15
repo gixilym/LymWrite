@@ -1,4 +1,4 @@
-import { readTextFile, removeFile } from "@tauri-apps/api/fs";
+import { readTextFile, removeFile, writeTextFile } from "@tauri-apps/api/fs";
 import { join, desktopDir } from "@tauri-apps/api/path";
 import { confirm } from "@tauri-apps/api/dialog";
 import { useSnippetStore } from "../store/snippetsStore.js";
@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { twMerge } from "tailwind-merge";
 import { toast } from "react-hot-toast";
 import { DeleteItemSVG, RecoveryItemSVG } from "./svgs.jsx";
+import { useEffect } from "react";
 
 function ItemForm(props) {
   const { snippetName, inTrash, paperIsOpen } = props,
@@ -15,12 +16,24 @@ function ItemForm(props) {
       selectedSnippet,
       removeSnippet,
       setSlideBarIsVisible,
-      addPaperBinItem,
       userConfig,
-      removePaperBinItem,
       addSnippetName,
+      setUserConfig,
     } = useSnippetStore(),
     dictionary = translations();
+
+  useEffect(() => {
+    async function updateUserConfig() {
+      try {
+        const desktop = await desktopDir(),
+          path = await join(desktop, "lymwrite-files", "config.json");
+        await writeTextFile(path, JSON.stringify(userConfig));
+      } catch (err) {
+        throw new Error(err.message);
+      }
+    }
+    updateUserConfig();
+  }, [userConfig]);
 
   async function onClickItem() {
     const desktop = await desktopDir(),
@@ -49,7 +62,10 @@ function ItemForm(props) {
       filePath = await join(path, `${snippetName}.txt`);
 
     if (confirmDelete) {
-      removePaperBinItem(snippetName);
+      setUserConfig({
+        paper: userConfig.paper.filter(item => item !== snippetName),
+      });
+      removeSnippet(snippetName);
       toast(`Mataste a ${snippetName}`, {
         icon: "⚰️",
         duration: 2000,
@@ -84,9 +100,10 @@ function ItemForm(props) {
           color: "#fff",
         },
       });
-      addPaperBinItem(snippetName);
+
       removeSnippet(snippetName);
       setSelectedSnippet(deletedSnippet);
+      setUserConfig({ paper: [...userConfig.paper, snippetName] });
     } else return;
   }
 
@@ -102,7 +119,9 @@ function ItemForm(props) {
     );
 
     if (recovery) {
-      removePaperBinItem(snippetName);
+      setUserConfig({
+        paper: userConfig.paper.filter(item => item !== snippetName),
+      });
       addSnippetName(snippetName);
       toast(`${dictionary.RestoreSuccess} ${snippetName}`, {
         icon: "❤️",

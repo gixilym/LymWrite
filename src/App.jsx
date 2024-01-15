@@ -13,14 +13,16 @@ function App() {
     { userConfig, setUserConfig } = useSnippetStore();
 
   useEffect(() => {
+    /* La función se ejecuta pero no crea la carpeta
     async function createFolder() {
       const desktop = await desktopDir(),
         path = await join(desktop, "lymwrite-files"),
-        exists = await fs.exists(path);
+        exists = await fs.exists(path)
       if (!exists) {
+        console.log("creando carpeta");
         await fs.createDir("lymwrite-files");
       }
-    }
+    }*/
 
     async function recoveryUserConfig() {
       const desktop = await desktopDir(),
@@ -34,12 +36,14 @@ function App() {
     }
 
     return () => {
-      createFolder();
+      /*  createFolder();*/
       recoveryUserConfig();
     };
   }, []);
 
-  if (configPage) return <ConfigPage setConfigPage={setConfigPage} />;
+  if (configPage) {
+    return <ConfigPage setConfigPage={setConfigPage} />;
+  }
 
   return (
     <div

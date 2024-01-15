@@ -28,16 +28,18 @@ export const useSnippetStore = create(set => ({
     fontSize: "text-2xl",
     fontFamily: "font-Roboto",
     textCenter: false,
+    paper: [],
   },
   setUserConfig: newConfig =>
     set(state => ({ userConfig: { ...state.userConfig, ...newConfig } })),
 
-  paperBin: [],
-  cleanPaperBin: () => set({ paperBin: [] }),
-  addPaperBinItem: newPaperItem =>
-    set(state => ({ paperBin: [...state.paperBin, newPaperItem] })),
-  removePaperBinItem: removedPaperItem =>
-    set(state => ({
-      paperBin: state.paperBin.filter(item => item !== removedPaperItem),
-    })),
+  // paperBin: [],
+  // setPaperBin: newPaperBin => set({ paperBin: newPaperBin }),
+  // cleanPaperBin: () => set({ paperBin: [] }),
+  // addPaperBinItem: newPaperItem =>
+  //   set(state => ({ paperBin: [...state.paperBin, newPaperItem] })),
+  // removePaperBinItem: removedPaperItem =>
+  //   set(state => ({
+  //     paperBin: state.paperBin.filter(item => item !== removedPaperItem),
+  //   })),
 }));

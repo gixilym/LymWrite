@@ -1,24 +1,12 @@
-import { useEffect } from "react";
 import { useSnippetStore } from "../store/snippetsStore.js";
 import { translations } from "../store/utils.js";
 import { ArrowConfig } from "./svgs.jsx";
-import { join, desktopDir } from "@tauri-apps/api/path";
-import { writeTextFile } from "@tauri-apps/api/fs";
 import { twMerge } from "tailwind-merge";
 
 function ConfigPage(props) {
   const { setConfigPage } = props,
     { userConfig, setUserConfig } = useSnippetStore(),
     dictionary = translations();
-
-  useEffect(() => {
-    async function updateUserConfig() {
-      const desktop = await desktopDir(),
-        path = await join(desktop, "lymwrite-files", "config.json");
-      await writeTextFile(path, JSON.stringify(userConfig));
-    }
-    return () => updateUserConfig();
-  }, [userConfig]);
 
   return (
     <div

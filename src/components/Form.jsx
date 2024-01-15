@@ -6,6 +6,7 @@ import { join, desktopDir } from "@tauri-apps/api/path";
 import { confirm } from "@tauri-apps/api/dialog";
 import { SettingsSVG } from "./svgs.jsx";
 import { twMerge } from "tailwind-merge";
+import { motion } from "framer-motion";
 
 function Form(props) {
   const { setSearchItem, setConfigPage, paperIsOpen, setPaperIsOpen } = props,
@@ -16,8 +17,7 @@ function Form(props) {
       setSlideBarIsVisible,
       snippetsNames,
       userConfig,
-      paperBin,
-      cleanPaperBin,
+      setUserConfig,
     } = useSnippetStore(),
     dictionary = translations(),
     snippetIsCode = name.includes("-code"),
@@ -58,10 +58,10 @@ function Form(props) {
       path = await join(desktop, "lymwrite-files");
 
     if (confirmClean) {
-      cleanPaperBin();
       toastAlert(dictionary.DeleteFiles, "success");
       setPaperIsOpen(false);
-      await paperBin.map(async function (item) {
+      setUserConfig({ paper: [] });
+      await userConfig.paper.map(async function (item) {
         const filePath = await join(path, `${item}.txt`);
         await removeFile(filePath);
       });
@@ -73,7 +73,7 @@ function Form(props) {
       <input
         onChange={e => setName(e.target.value)}
         value={name}
-        className={`${userConfig.theme} w-full outline-none p-4 border-l-2 border-b-2 rounded-xl border-zinc-700 mb-4`}
+        className={`${userConfig.theme} w-full outline-none p-4 border-b-[1.5px] border-l-[1.5px] rounded-xl border-indigo-500 mb-4`}
         type="text"
         placeholder={dictionary.AddNewItem}
       />
@@ -84,7 +84,7 @@ function Form(props) {
       <div className="flex justify-start items-center mb-8 w-full text-slate-400 gap-x-3">
         <div className="relative flex justify-between items-center w-3/6 bg-zinc-700 rounded-xl">
           <input
-            className="outline-0 border-0 bg-zinc-700  rounded-xl w-3/4 text-center text-white py-1"
+            className="outline-0 border-0 bg-zinc-700 rounded-xl w-3/4 text-center text-white py-1"
             type="text"
             placeholder={dictionary.SearchItem}
             onChange={e => setSearchItem(e.target.value)}
@@ -118,7 +118,7 @@ function Form(props) {
           {dictionary.Paper}
         </button>
 
-        {paperIsOpen && paperBin.length > 0 && (
+        {paperIsOpen && userConfig.paper.length > 0 && (
           <button
             className="bg-red-500 hover:bg-red-400 cursor-pointer text-white outline-0 border-0 w-max px-4 py-1 rounded-xl"
             onClick={handleCleanPaperBin}

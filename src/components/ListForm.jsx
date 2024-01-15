@@ -9,8 +9,16 @@ import { motion } from "framer-motion";
 function ListForm(props) {
   const { searchItem, paperIsOpen } = props,
     dictionary = translations(),
-    { snippetsNames, setSnippetsNames, paperBin } = useSnippetStore(),
-    snippetsFormat = snippetsNames.filter(item => item !== "config"),
+    {
+      snippetsNames,
+      setSnippetsNames,
+      userConfig,
+      setSelectedSnippet,
+      setSlideBarIsVisible,
+    } = useSnippetStore(),
+    snippetsFormat = snippetsNames.filter(
+      item => item !== "config" && !userConfig.paper.includes(item)
+    ),
     filterSearches = snippetsFormat.filter(name => name.includes(searchItem)),
     NothingHere = (
       <motion.p
@@ -20,6 +28,15 @@ function ListForm(props) {
       >
         {dictionary.NothingHere}
       </motion.p>
+    ),
+    LymWriteText = (
+      <p
+        onClick={onClickLymWrite}
+        className="absolute top-3 left-5 text-2xl cursor-pointer duration-100 hover:scale-110 opacity-70 hover:opacity-100"
+      >
+        <span className="text-indigo-500">L</span>ym
+        <span className="text-indigo-500">W</span>rite
+      </p>
     );
 
   useEffect(() => {
@@ -33,9 +50,18 @@ function ListForm(props) {
     return () => loadFiles();
   }, []);
 
-  function renderPaperBin() {
-    if (paperBin.length > 0) {
-      return paperBin.map(snippetName => (
+  function onClickLymWrite() {
+    setSelectedSnippet({
+      name: null,
+      content: "",
+      isCode: false,
+    });
+    setSlideBarIsVisible();
+  }
+
+  function renderPaper() {
+    if (userConfig.paper.length > 0) {
+      return userConfig.paper.map(snippetName => (
         <ItemForm
           inTrash
           paperIsOpen
@@ -68,9 +94,10 @@ function ListForm(props) {
 
   return (
     <ol className="w-full h-6/6 select-none flex flex-col justify-start items-center">
+      {LymWriteText}
       {searchItem == null && renderEveryFiles()}
       {searchItem != null && renderSearchResults()}
-      {paperIsOpen && renderPaperBin()}
+      {paperIsOpen && renderPaper()}
     </ol>
   );
 }
