@@ -3,7 +3,7 @@ import { translations } from "../store/utils.js";
 import { ArrowConfig } from "./svgs.jsx";
 import { twMerge } from "tailwind-merge";
 
-function ConfigPage(props) {
+async function ConfigPage(props) {
   const { setConfigPage } = props,
     { userConfig, setUserConfig } = useSnippetStore(),
     dictionary = translations();
